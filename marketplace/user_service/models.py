@@ -55,11 +55,14 @@ class User(AbstractUser):
         max_length=2, choices=UserStatus,
         default=UserStatus.NOT_VERIFIED, verbose_name='Статус'
     )
+    is_saller = models.BooleanField(
+        default=False
+    )
 
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
         db_table = 'users_table'
 
-    def _str_(self):
-        return f'{self.email}, {self.name}'
+    def __str__(self):
+        return f'{self.email}, {self.first_name}'
