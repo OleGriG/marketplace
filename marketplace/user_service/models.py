@@ -66,3 +66,10 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.email}, {self.first_name}'
+
+
+class Seller(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE
+    )
+    company_name = models.CharField()

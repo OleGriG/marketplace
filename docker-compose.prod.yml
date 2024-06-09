@@ -1,0 +1,31 @@
+version: '3'
+
+volumes:
+  pg_data:
+  static:
+  media:
+
+services:
+  db:
+    container_name: marketplace_db
+    image: postgres:15
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  backend:
+    container_name: marketplace_backend
+    image: grigoleg/marketplace_backend
+    env_file: .env
+    volumes:
+      - static:/static_backend
+      - media:/media
+  gateway:
+    container_name: marketplace_gateway
+    image: grigoleg/marketplace_gateway
+    build: ./gateway/
+    env_file: .env
+    ports:
+      - 9000:80
+    volumes:
+      - static:/static
+      - media:/media

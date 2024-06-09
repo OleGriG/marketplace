@@ -1,6 +1,6 @@
 from django.db import models
 
-from user_service.models import User
+from user_service.models import User, Seller
 
 
 class Category(models.Model):
@@ -28,14 +28,61 @@ class Product(models.Model):
         verbose_name='имя продукта'
     )
     owner = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE
+        Seller,
+        on_delete=models.CASCADE,
+        null=True
     )
     display_on_main_page = models.BooleanField(
         verbose_name="показывать на главной странице?",
         default=False
     )
-    # TODO: добавить фотки и минио
+    price = models.IntegerField(
+        verbose_name="Цена",
+        default=0
+    )
+    rate = models.FloatField(
+        verbose_name="Рейтинг товара",
+        default=0
+    )
+    main_photo = models.ImageField(
+        verbose_name=' главная фотография',
+        upload_to='product_photos/',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.name
+
+
+class ProductPhoto(models.Model):
+    photo = models.ImageField(
+        verbose_name='фотография',
+        upload_to='product_photos/'
+    )
+    product = models.ForeignKey(
+        Product,
+        verbose_name='продукт',
+        on_delete=models.CASCADE
+    )
+
+
+class Slider(models.Model):
+    photo = models.ImageField(
+        verbose_name='фотография',
+        upload_to='product_photos/'
+    )
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="user",
+        unique=True
+    )
+    products = models.ManyToManyField(
+        Product,
+        null=True,
+        blank=True
+    )
