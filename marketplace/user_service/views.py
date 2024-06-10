@@ -109,7 +109,7 @@ class LoginView(TokenViewBase):
                     'user': UserSerializer(user).data
                 })
         return Response({'error': 'Неверные данные для входа'},
-                        status=status.HTTP_400_BAD_REQUEST) 
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 class RefreshTokenView(APIView):

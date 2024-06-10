@@ -75,7 +75,7 @@ class Slider(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         verbose_name="user",
@@ -83,6 +83,5 @@ class Cart(models.Model):
     )
     products = models.ManyToManyField(
         Product,
-        null=True,
         blank=True
     )

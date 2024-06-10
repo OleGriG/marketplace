@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
@@ -10,7 +11,7 @@ from drf_yasg.utils import swagger_auto_schema
 from .models import Category, Product, Slider, Cart
 from .serializers import (
     CategorySerializer, ProductSerializer, DetaileProductSerializer,
-    SliderSerializer, CartSerializer
+    SliderSerializer, CartSerializer, CartAddProductSerializer
 )
 from .filtersets import ProductFilter
 from core.permissions import OnlySellers, IsOwnerOrReadOnly, IsOwner
@@ -50,13 +51,28 @@ class SliderApiView(ListAPIView):
     permission_classes = [AllowAny]
 
 
-class CartViewSet(APIView):
+class CartViewSet(viewsets.GenericViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
 
-    @action(methods=['post'])
+    def get_queryset(self):
+        cart, created = Cart.objects.get_or_create(user=self.request.user)
+        return cart
+
+    @action(methods=['post'], detail=False, url_path='add-to-cart')
     def add_to_cart(self, request):
-        cart = Cart.objects.get_or_create(user=request.user)
+        cart = self.get_queryset()
+        serializer = CartAddProductSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        product_id = serializer.validated_data['product_id']
+        product = Product.objects.get(id=product_id)
+        cart.products.add(product)
+        cart.save()
+        return Response(CartSerializer(cart).data, status=status.HTTP_200_OK)
 
-
+    @action(methods=['get'], detail=False, url_path='get-cart')
+    def get_cart(self, request):
+        cart = self.get_queryset()
+        serializer = CartSerializer(cart)
+        return Response(serializer.data, status=status.HTTP_200_OK)
