@@ -14,9 +14,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ProductPhoto',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('photo', models.ImageField(upload_to='product_photos/', verbose_name='фотография')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='product_service.product', verbose_name='продукт')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('photo', models.ImageField(
+                    upload_to='product_photos/', verbose_name='фотография')),
+                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 to='product_service.product', verbose_name='продукт')),
             ],
         ),
     ]

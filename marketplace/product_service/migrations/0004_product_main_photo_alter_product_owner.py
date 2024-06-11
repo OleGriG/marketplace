@@ -16,11 +16,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='product',
             name='main_photo',
-            field=models.ImageField(null=True, upload_to='product_photos/', verbose_name=' главная фотография'),
+            field=models.ImageField(
+                null=True, upload_to='product_photos/', verbose_name=' главная фотография'),
         ),
         migrations.AlterField(
             model_name='product',
             name='owner',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
     ]

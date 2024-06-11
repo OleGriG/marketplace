@@ -18,15 +18,18 @@ class DetaileProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
-        read_only_fields = ('rate', 'display_on_main_page', 'owner', 'main_photo' 'photos')
+        read_only_fields = ('rate', 'display_on_main_page',
+                            'owner', 'main_photo' 'photos')
 
 
 class ProductSerializer(serializers.ModelSerializer):
     owner = SellerSerializer()
+
     class Meta:
         model = Product
         fields = '__all__'
-        read_only_fields = ('rate', 'display_on_main_page', 'owner', 'main_photo')
+        read_only_fields = ('rate', 'display_on_main_page',
+                            'owner', 'main_photo')
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -54,5 +57,6 @@ class CartAddProductSerializer(serializers.Serializer):
 
     def validate_product_id(self, value):
         if not Product.objects.filter(id=value).exists():
-            raise serializers.ValidationError("Product with this ID does not exist.")
+            raise serializers.ValidationError(
+                "Product with this ID does not exist.")
         return value
