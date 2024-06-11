@@ -27,7 +27,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip 
         pip install flake8==6.0.0 flake8-isort==6.0.0
-        pip install -r requirements.txt 
+        pip install -r marteplace/requirements.txt 
     - name: Test with flake8
       env:
         SECRET_KEY: django-insecure-i3oa78jvvn)y(yvx)_zo$(uxp4$jw4c*dub1bl6#&u5mf&x_ix
