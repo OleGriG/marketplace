@@ -25,8 +25,9 @@ jobs:
 
     - name: Install dependencies
       run: |
+        autopep8 --in-place --recursive .
         python -m pip install --upgrade pip 
-        pip install flake8==6.0.0 flake8-isort==6.0.0
+        pip install --upgrade flake8 pycodestyle
         pip install -r marketplace/requirements.txt 
     - name: Test with flake8
       env:
