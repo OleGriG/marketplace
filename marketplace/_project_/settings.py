@@ -46,6 +46,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = [
+    'https://bububu.zapto.org',
+    'https://goodberries.netlify.app'
+]
 
 ROOT_URLCONF = '_project_.urls'
 
