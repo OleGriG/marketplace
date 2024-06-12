@@ -60,3 +60,10 @@ class CartAddProductSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 "Product with this ID does not exist.")
         return value
+
+
+class CartRemoveProducts(serializers.Serializer):
+    products_ids = serializers.ListField(
+        child=serializers.IntegerField(),
+        allow_empty=False
+    )

@@ -11,7 +11,8 @@ from drf_yasg.utils import swagger_auto_schema
 from .models import Category, Product, Slider, Cart
 from .serializers import (
     CategorySerializer, ProductSerializer, DetaileProductSerializer,
-    SliderSerializer, CartSerializer, CartAddProductSerializer
+    SliderSerializer, CartSerializer, CartAddProductSerializer,
+    CartRemoveProducts
 )
 from .filtersets import ProductFilter
 from core.permissions import OnlySellers, IsOwnerOrReadOnly, IsOwner
@@ -51,7 +52,7 @@ class SliderApiView(ListAPIView):
     permission_classes = [AllowAny]
 
 
-class CartViewSet(viewsets.GenericViewSet):
+class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
@@ -76,3 +77,13 @@ class CartViewSet(viewsets.GenericViewSet):
         cart = self.get_queryset()
         serializer = CartSerializer(cart)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(methods=['post'], detail=False, url_path='remove-products')
+    def remove_products_from_cart(self, request):
+        cart = self.get_queryset()
+        serializer = CartRemoveProducts(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        product_ids = serializer.validated_data.get('product_ids')
+        products_to_remove = Product.objects.filter(id__in=product_ids)
+        cart.products.remove(*products_to_remove)
+        return Response({"message": "Ok"}, status=status.HTTP_200_OK)
