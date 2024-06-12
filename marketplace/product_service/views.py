@@ -24,6 +24,12 @@ class ListCategoryView(ListAPIView):
     serializer_class = CategorySerializer
 
 
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = CategorySerializer
+
+
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.select_related('owner')
     permission_classes = [IsOwnerOrReadOnly]
@@ -83,7 +89,7 @@ class CartViewSet(viewsets.ModelViewSet):
         cart = self.get_queryset()
         serializer = CartRemoveProducts(data=request.data)
         serializer.is_valid(raise_exception=True)
-        product_ids = serializer.validated_data.get('product_ids')
+        product_ids = serializer.validated_data.get('products_ids')
         products_to_remove = Product.objects.filter(id__in=product_ids)
         cart.products.remove(*products_to_remove)
         return Response({"message": "Ok"}, status=status.HTTP_200_OK)

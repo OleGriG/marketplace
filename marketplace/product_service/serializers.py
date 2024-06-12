@@ -33,10 +33,11 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True, read_only=True)
+
     class Meta:
         model = Category
-        fields = '__all__'
-
+        fields = ['id', 'name', 'products']
 
 class SliderSerializer(serializers.ModelSerializer):
     class Meta:
